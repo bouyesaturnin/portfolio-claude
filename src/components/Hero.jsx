@@ -1,12 +1,14 @@
-import { useEffect, useRef } from 'react'
+import useIsMobile from '../hooks/useIsMobile'
 
 export default function Hero() {
+  const isMobile = useIsMobile()
+  const pad = isMobile ? '110px 24px 60px' : '140px 60px 80px'
+
   return (
     <section id="hero" style={{
       minHeight: '100vh', display: 'flex', alignItems: 'center',
-      padding: '140px 60px 80px', position: 'relative', overflow: 'hidden',
+      padding: pad, position: 'relative', overflow: 'hidden',
     }}>
-      {/* Background accent */}
       <div style={{
         position: 'absolute', top: '20%', right: '-10%',
         width: '500px', height: '500px',
@@ -14,25 +16,25 @@ export default function Hero() {
         pointerEvents: 'none',
       }} />
 
-      <div style={{ maxWidth: '750px' }}>
-        {/* Eyebrow */}
+      <div style={{ maxWidth: '750px', width: '100%' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '36px',
           animation: 'fadeUp .8s .1s ease both' }}>
           <div style={{ width: '40px', height: '1px', background: '#c9a96e' }} />
-          <span style={{ fontSize: '.68rem', letterSpacing: '.3em', textTransform: 'uppercase',
-            color: '#c9a96e' }}>Designer · Développeur · Docteur ENS</span>
+          <span style={{ fontSize: isMobile ? '.6rem' : '.68rem', letterSpacing: '.3em',
+            textTransform: 'uppercase', color: '#c9a96e' }}>
+            Designer · Développeur · Docteur ENS
+          </span>
         </div>
 
-        {/* Title */}
-        <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(3.5rem, 8vw, 7rem)',
+        <h1 style={{ fontFamily: "'Cormorant Garamond', serif",
+          fontSize: isMobile ? 'clamp(3rem, 15vw, 4.5rem)' : 'clamp(3.5rem, 8vw, 7rem)',
           fontWeight: 300, lineHeight: .95, color: '#faf8f3', marginBottom: '32px',
           animation: 'fadeUp .8s .25s ease both' }}>
           Saturnin<br />
           <em style={{ fontStyle: 'italic', color: '#c9a96e' }}>Bouye</em>
         </h1>
 
-        {/* Subtitle */}
-        <p style={{ fontSize: '1rem', lineHeight: 1.8, color: '#6b6657',
+        <p style={{ fontSize: isMobile ? '.88rem' : '1rem', lineHeight: 1.8, color: '#6b6657',
           maxWidth: '480px', marginBottom: '52px',
           animation: 'fadeUp .8s .4s ease both' }}>
           Je conçois des interfaces web élégantes et des applications robustes,
@@ -41,8 +43,7 @@ export default function Hero() {
           {' '}et d'une exigence académique forgée à l'<strong style={{ color: '#f0ead8' }}>ENS de Paris</strong>.
         </p>
 
-        {/* CTAs */}
-        <div style={{ display: 'flex', gap: '24px', alignItems: 'center',
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center',
           animation: 'fadeUp .8s .55s ease both' }}>
           <a href="#projets" style={{
             display: 'inline-flex', alignItems: 'center', gap: '12px',
@@ -83,9 +84,8 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll hint */}
       <div style={{ position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',
+        display: isMobile ? 'none' : 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',
         animation: 'fadeIn 1s 1s ease both' }}>
         <span style={{ fontSize: '.6rem', letterSpacing: '.25em', textTransform: 'uppercase', color: '#6b6657' }}>Scroll</span>
         <div style={{ width: '1px', height: '50px',

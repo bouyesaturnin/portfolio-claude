@@ -1,3 +1,5 @@
+import useIsMobile from '../hooks/useIsMobile'
+
 const timeline = [
   { year: '2000', label: 'Arts graphiques', desc: 'Formation aux fondamentaux du dessin et de la composition visuelle.' },
   { year: '2019', label: 'Doctorat — ENS Paris', desc: 'Doctorat obtenu à l\'École Normale Supérieure de Paris, rigueur et profondeur analytique.' },
@@ -6,21 +8,27 @@ const timeline = [
 ]
 
 export default function About() {
+  const isMobile = useIsMobile()
+  const pad = isMobile ? '80px 24px' : '120px 60px'
+
   return (
-    <section id="a-propos" style={{ padding: '120px 60px', borderTop: '1px solid rgba(201,169,110,.12)' }}>
+    <section id="a-propos" style={{ padding: pad, borderTop: '1px solid rgba(201,169,110,.12)' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
-        {/* Top row: eyebrow + title + photo */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '60px',
-          alignItems: 'start', marginBottom: '64px' }}>
-
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr auto',
+          gap: isMobile ? '40px' : '60px',
+          alignItems: 'start', marginBottom: '64px',
+        }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '28px' }}>
               <div style={{ width: '40px', height: '1px', background: '#c9a96e' }} />
               <span style={{ fontSize: '.68rem', letterSpacing: '.3em', textTransform: 'uppercase', color: '#c9a96e' }}>À propos</span>
             </div>
 
-            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2.5rem, 4vw, 3.8rem)',
+            <h2 style={{ fontFamily: "'Cormorant Garamond', serif",
+              fontSize: isMobile ? 'clamp(2rem, 10vw, 3rem)' : 'clamp(2.5rem, 4vw, 3.8rem)',
               fontWeight: 300, lineHeight: 1.1, color: '#faf8f3', marginBottom: '28px' }}>
               Un profil<br /><em style={{ fontStyle: 'italic', color: '#c9a96e' }}>atypique</em>
             </h2>
@@ -50,52 +58,46 @@ export default function About() {
           </div>
 
           {/* Photo */}
-          <div style={{ position: 'relative', flexShrink: 0 }}>
+          <div style={{ position: 'relative', flexShrink: 0,
+            display: 'flex', justifyContent: isMobile ? 'center' : 'flex-end' }}>
             <div style={{
-              width: '220px', height: '280px',
-              border: '1px solid rgba(201,169,110,.25)',
-              borderRadius: '4px', overflow: 'hidden',
-              position: 'relative',
+              width: isMobile ? '160px' : '220px',
+              height: isMobile ? '200px' : '280px',
+              border: '1px solid rgba(201,169,110,.25)', borderRadius: '4px',
+              overflow: 'hidden', position: 'relative',
               boxShadow: '0 30px 60px rgba(0,0,0,.5)',
             }}>
               <img src="/photo.jpg" alt="Saturnin Bouye"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
             </div>
-            {/* Gold corner accent */}
-            <div style={{
-              position: 'absolute', top: '-12px', right: '-12px',
-              width: '60px', height: '60px',
-              borderTop: '2px solid #c9a96e', borderRight: '2px solid #c9a96e',
-              borderRadius: '0 4px 0 0',
-            }} />
-            <div style={{
-              position: 'absolute', bottom: '-12px', left: '-12px',
-              width: '60px', height: '60px',
-              borderBottom: '2px solid #c9a96e', borderLeft: '2px solid #c9a96e',
-              borderRadius: '0 0 0 4px',
-            }} />
-            {/* Name tag */}
-            <div style={{
-              position: 'absolute', bottom: '-24px', left: '50%',
-              transform: 'translateX(-50%)',
+            <div style={{ position: 'absolute', top: '-12px', right: '-12px',
+              width: '50px', height: '50px',
+              borderTop: '2px solid #c9a96e', borderRight: '2px solid #c9a96e', borderRadius: '0 4px 0 0' }} />
+            <div style={{ position: 'absolute', bottom: '-12px', left: '-12px',
+              width: '50px', height: '50px',
+              borderBottom: '2px solid #c9a96e', borderLeft: '2px solid #c9a96e', borderRadius: '0 0 0 4px' }} />
+            <div style={{ position: 'absolute', bottom: '-24px', left: '50%', transform: 'translateX(-50%)',
               background: '#0a0a08', border: '1px solid rgba(201,169,110,.3)',
               padding: '8px 20px', borderRadius: '2px', whiteSpace: 'nowrap',
-              fontSize: '.6rem', letterSpacing: '.2em', textTransform: 'uppercase',
-              color: '#c9a96e',
-            }}>
+              fontSize: '.6rem', letterSpacing: '.2em', textTransform: 'uppercase', color: '#c9a96e' }}>
               Saturnin Bouye
             </div>
           </div>
         </div>
 
         {/* Timeline */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0',
-          borderTop: '1px solid rgba(201,169,110,.12)', paddingTop: '48px' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(4, 1fr)',
+          gap: '0',
+          borderTop: '1px solid rgba(201,169,110,.12)', paddingTop: '48px',
+        }}>
           {timeline.map((item, i) => (
             <div key={i} style={{
-              padding: '0 32px 0 0',
-              borderRight: i < timeline.length - 1 ? '1px solid rgba(201,169,110,.1)' : 'none',
-              marginRight: i < timeline.length - 1 ? '32px' : '0',
+              padding: isMobile ? '20px 0' : '0 32px 0 0',
+              borderRight: !isMobile && i < timeline.length - 1 ? '1px solid rgba(201,169,110,.1)' : 'none',
+              borderBottom: isMobile && i < timeline.length - 1 ? '1px solid rgba(201,169,110,.1)' : 'none',
+              marginRight: !isMobile && i < timeline.length - 1 ? '32px' : '0',
             }}>
               <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '1.4rem',
                 fontWeight: 300, color: '#c9a96e', marginBottom: '12px' }}>{item.year}</div>
@@ -105,7 +107,6 @@ export default function About() {
             </div>
           ))}
         </div>
-
       </div>
     </section>
   )
