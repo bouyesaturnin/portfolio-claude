@@ -59,9 +59,21 @@ export default function Contact() {
             <div style={{ color: '#c9a96e', letterSpacing: '.1em', marginBottom: '8px' }}>
               Message envoyé avec succès !
             </div>
-            <div style={{ fontSize: '.8rem', color: '#6b6657' }}>
+            <div style={{ fontSize: '.8rem', color: '#6b6657', marginBottom: '24px' }}>
               Je vous répondrai à l'adresse indiquée très prochainement.
             </div>
+            <button onClick={() => setStatus('idle')} style={{
+              background: 'transparent', border: '1px solid rgba(201,169,110,.3)',
+              color: '#c9a96e', padding: '10px 24px', cursor: 'pointer',
+              fontFamily: "'Syne', sans-serif", fontSize: '.68rem',
+              letterSpacing: '.18em', textTransform: 'uppercase', borderRadius: '2px',
+              transition: 'background .25s',
+            }}
+              onMouseEnter={e => e.target.style.background = 'rgba(201,169,110,.1)'}
+              onMouseLeave={e => e.target.style.background = 'transparent'}
+            >
+              Envoyer un autre message
+            </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
