@@ -67,6 +67,19 @@ export default function Hero() {
           >
             Me contacter
           </a>
+
+          <a href="/cv-saturnin-bouye.pdf" download style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            fontSize: '.72rem', letterSpacing: '.2em', textTransform: 'uppercase',
+            color: '#c9a96e', textDecoration: 'none',
+            border: '1px solid rgba(201,169,110,.4)', padding: '14px 24px',
+            borderRadius: '2px', transition: 'background .25s, color .25s',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#c9a96e'; e.currentTarget.style.color = '#0a0a08' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#c9a96e' }}
+          >
+            ↓ CV
+          </a>
         </div>
       </div>
 
