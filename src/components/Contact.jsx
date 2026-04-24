@@ -1,8 +1,10 @@
 import { useState } from 'react'
 
+const FORMSPREE_URL = 'https://formspree.io/f/mlevdrkr'
+
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
-  const [sent, setSent] = useState(false)
+  const [status, setStatus] = useState('idle') // idle | sending | sent | error
 
   const inputStyle = {
     width: '100%', background: 'rgba(255,255,255,.03)',
@@ -10,6 +12,26 @@ export default function Contact() {
     padding: '16px 20px', color: '#f0ead8',
     fontFamily: "'Syne', sans-serif", fontSize: '.85rem',
     outline: 'none', transition: 'border-color .25s',
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setStatus('sending')
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (res.ok) {
+        setStatus('sent')
+        setForm({ name: '', email: '', message: '' })
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -30,15 +52,19 @@ export default function Contact() {
           Un projet web, une collaboration, une question ? Écrivez-moi.
         </p>
 
-        {sent ? (
+        {status === 'sent' ? (
           <div style={{ padding: '40px', border: '1px solid rgba(201,169,110,.3)',
             borderRadius: '4px', textAlign: 'center' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '16px' }}>✓</div>
-            <div style={{ color: '#c9a96e', letterSpacing: '.1em' }}>Message envoyé — je vous répondrai très vite.</div>
+            <div style={{ fontSize: '2rem', marginBottom: '16px', color: '#c9a96e' }}>✓</div>
+            <div style={{ color: '#c9a96e', letterSpacing: '.1em', marginBottom: '8px' }}>
+              Message envoyé avec succès !
+            </div>
+            <div style={{ fontSize: '.8rem', color: '#6b6657' }}>
+              Je vous répondrai à l'adresse indiquée très prochainement.
+            </div>
           </div>
         ) : (
-          <form onSubmit={e => { e.preventDefault(); setSent(true) }}
-            style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
               <input type="text" placeholder="Votre nom" required value={form.name}
                 onChange={e => setForm({ ...form, name: e.target.value })}
@@ -59,17 +85,25 @@ export default function Contact() {
               onFocus={e => e.target.style.borderColor = '#c9a96e'}
               onBlur={e => e.target.style.borderColor = 'rgba(201,169,110,.2)'}
             />
-            <button type="submit" style={{
-              alignSelf: 'flex-start', background: '#c9a96e', color: '#0a0a08',
-              border: 'none', padding: '16px 40px', cursor: 'pointer',
+
+            {status === 'error' && (
+              <div style={{ fontSize: '.82rem', color: '#e07070', padding: '12px 16px',
+                border: '1px solid rgba(224,112,112,.3)', borderRadius: '2px' }}>
+                Une erreur s'est produite. Veuillez réessayer ou m'écrire directement à bouyesaturnin@yahoo.fr
+              </div>
+            )}
+
+            <button type="submit" disabled={status === 'sending'} style={{
+              alignSelf: 'flex-start', background: status === 'sending' ? '#8a6f42' : '#c9a96e',
+              color: '#0a0a08', border: 'none', padding: '16px 40px', cursor: status === 'sending' ? 'wait' : 'pointer',
               fontFamily: "'Syne', sans-serif", fontSize: '.72rem', fontWeight: 700,
               letterSpacing: '.2em', textTransform: 'uppercase', borderRadius: '2px',
               transition: 'background .25s, transform .25s',
             }}
-              onMouseEnter={e => { e.target.style.background = '#f0ead8'; e.target.style.transform = 'translateY(-2px)' }}
-              onMouseLeave={e => { e.target.style.background = '#c9a96e'; e.target.style.transform = 'translateY(0)' }}
+              onMouseEnter={e => { if (status !== 'sending') { e.target.style.background = '#f0ead8'; e.target.style.transform = 'translateY(-2px)' }}}
+              onMouseLeave={e => { e.target.style.background = status === 'sending' ? '#8a6f42' : '#c9a96e'; e.target.style.transform = 'translateY(0)' }}
             >
-              Envoyer le message →
+              {status === 'sending' ? 'Envoi en cours...' : 'Envoyer le message →'}
             </button>
           </form>
         )}
